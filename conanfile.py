@@ -13,7 +13,7 @@ class PnicoreConan(ConanFile):
                "with_conan_boost":[True,False]}
     default_options = "shared=True","with_conan_boost=False"
     generators = "cmake"
-    build_policy="always"
+    build_policy="missing"
     description = """
     Package builds the current master branch of the pnicore library.
     This is intended for developers which want to work with this development
