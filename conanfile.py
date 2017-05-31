@@ -49,9 +49,14 @@ class PnicoreConan(ConanFile):
 
         cmake.configure(source_dir="libpnicore",
                         defs=cmake_defs)
+        
+        cmake.build()
 
-        cmake.build(target="all")
-        cmake.build(target="test")
+        if self.settings.os=="Windows":
+            cmake.build(target="RUN_TESTS")
+        else:
+            cmake.build(target="test")
+
         cmake.build(target="install")
 
 
