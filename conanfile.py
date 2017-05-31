@@ -4,7 +4,7 @@ import os
 
 class PnicoreConan(ConanFile):
     name = "pnicore"
-    requires = "Boost/1.64.0@wintersb/stable"
+    requires = (("Boost/1.64.0@wintersb/stable","private"),)
     version = "1.1.0"
     license = "GPL V2"
     url = "<Package recipe repository url here, for issues about the package>"
