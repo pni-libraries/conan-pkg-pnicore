@@ -50,6 +50,7 @@ conan_basic_setup()
 
 
         cmake_defs["CMAKE_INSTALL_PREFIX"] = self.package_folder
+        cmake_defs["CMAKE_BUILD_TYPE"] = self.settings.build_type
 
         cmake.configure(source_dir="libpnicore",
                         defs=cmake_defs)
