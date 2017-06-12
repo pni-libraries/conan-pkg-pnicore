@@ -25,7 +25,7 @@ class PnicoreConan(ConanFile):
         #setting up boost if required
         if not self.options.with_system_boost:
             self.requires(self.boost_package)
-            
+
             self.options["Boost"].shared = self.options.shared
 
     def source(self):
@@ -53,15 +53,15 @@ conan_basic_setup()
 
         cmake.configure(source_dir="libpnicore",
                         defs=cmake_defs)
-        
+
         cmake.build()
 
         if self.settings.os=="Windows":
-            cmake.build(target="ALL_BUILD")
+            cmake.build(target="RUN_TESTS")
         else:
             cmake.build(target="test")
 
-        
+
         cmake.build(target="install")
 
 
