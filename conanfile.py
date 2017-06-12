@@ -57,11 +57,10 @@ conan_basic_setup()
 
         cmake.build()
 
-        if self.scope.run_tests:
-            if self.settings.os=="Windows":
-                cmake.build(target="RUN_TESTS")
-            else:
-                cmake.build(target="test")
+        if self.settings.os=="Windows":
+            cmake.build(target="RUN_TESTS")
+        else:
+            cmake.build(target="test")
 
 
         cmake.build(target="install")
