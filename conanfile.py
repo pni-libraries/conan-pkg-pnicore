@@ -57,10 +57,11 @@ conan_basic_setup()
 
         cmake.build()
 
-        if self.settings.os=="Windows":
-            cmake.build(target="RUN_TESTS")
-        else:
-            cmake.build(target="test")
+        if self.scope.run_tests:
+            if self.settings.os=="Windows":
+                cmake.build(target="RUN_TESTS")
+            else:
+                cmake.build(target="test")
 
 
         cmake.build(target="install")
@@ -71,3 +72,8 @@ conan_basic_setup()
 
     def package_info(self):
         self.cpp_info.libs = ["pnicore"]
+
+    def imports(self):
+        #on windows we copy the files to the bin directory
+        if self.settings.os=="Windows":
+            self.copy("*.dll","bin","bin")
