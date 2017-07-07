@@ -44,17 +44,16 @@ conan_basic_setup()
 
     def build(self):
         cmake = CMake(self)
-        cmake_defs = {}
 
         if self.options.shared:
-            cmake_defs["BUILD_SHARED_LIBS"]="ON"
+            cmake.definitions["BUILD_SHARED_LIBS"]="ON"
 
 
-        cmake_defs["CMAKE_INSTALL_PREFIX"] = self.package_folder
-        cmake_defs["CMAKE_BUILD_TYPE"] = self.settings.build_type
 
-        cmake.configure(source_dir="libpnicore",
-                        defs=cmake_defs)
+        cmake.definitions["CMAKE_INSTALL_PREFIX"] = self.package_folder
+        cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
+
+        cmake.configure(source_dir="libpnicore")
 
         cmake.build()
 
