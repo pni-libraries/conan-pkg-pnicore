@@ -1,6 +1,11 @@
 #include <iostream>
-#include "hello.h"
+#include <pni/core.hpp>
+
+using namespace pni::core;
 
 int main() {
-    hello();
+
+	std::cout<<type_id_t::FLOAT32<<std::endl;
+
+	return 0;
 }
