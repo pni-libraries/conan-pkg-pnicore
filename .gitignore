@@ -1,1 +1,6 @@
 *.swp
+conanfile.txt
+conaninfo.txt
+conanbuildinfo.cmake
+/.project
+/.pydevproject
