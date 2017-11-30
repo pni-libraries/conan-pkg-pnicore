@@ -1,5 +1,6 @@
 from conans import ConanFile, CMake, tools
 import os
+import git
 
 
 class PnicoreConan(ConanFile):
@@ -9,8 +10,9 @@ class PnicoreConan(ConanFile):
     url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False],
-               "with_system_boost":[True,False]}
-    default_options = "shared=True","with_system_boost=False"
+               "with_system_boost":[True,False],
+               "commit":"ANY"}
+    default_options = "shared=True","with_system_boost=False","commit=0"
     generators = "cmake"
     build_policy="missing"
     description = """
@@ -20,6 +22,28 @@ class PnicoreConan(ConanFile):
     """
 
     boost_package = "Boost/1.62.0@lasote/stable"
+    
+    def _get_current_commit(self):
+        #we pull here the repository and add the commit to the build options. 
+        #if the commit has changed the hash of the build configuration will change
+        #and thus force a rebuild of the package
+        
+        current_commit = None
+        self.output.info("Checking the GIT commit")       
+        source_path =  os.path.join(self.conanfile_directory,"..","source","libpnicore")
+        self.output.info("Trying to access repository in: "+source_path)
+        try:
+            self.run("cd %s && git pull" %source_path) 
+            repo = git.Repo(source_path)
+            current_commit = repo.commit().hexsha
+            self.output.info("Current commit is: "+current_commit)
+            
+        except:
+            self.output.info("Could not retrieve current commit of sources")
+            
+        return current_commit
+        
+        
 
     def configure(self):
         #setting up boost if required
@@ -27,6 +51,15 @@ class PnicoreConan(ConanFile):
             self.requires(self.boost_package)
 
             self.options["Boost"].shared = self.options.shared
+            
+            
+        current_commit = self._get_current_commit()
+        
+        if current_commit != None:
+            #if we can obtain the actual commit of the repository we can do something with it
+            self.options.commit = current_commit
+            
+        
 
     def source(self):
         self.run("git clone https://github.com/pni-libraries/libpnicore.git")
