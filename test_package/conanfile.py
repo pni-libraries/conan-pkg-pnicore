@@ -8,7 +8,7 @@ username = os.getenv("CONAN_USERNAME", "wintersb")
 
 class PnicoreTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    requires = "pnicore/1.1.0@%s/%s" % (username, channel)
+    requires = "pnicore/master@%s/%s" % (username, channel)
     generators = "cmake"
 
     def build(self):

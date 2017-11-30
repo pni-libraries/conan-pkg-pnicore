@@ -1,11 +1,23 @@
 from conans import ConanFile, CMake, tools
 import os
-import git
 
 
 class PnicoreConan(ConanFile):
+    """
+    Building the pnicore library from a the current repository. 
+    """
+    #
+    # set this to the appropriate library version and deactivate 
+    # auto_update for stables releases
+    #
+    version = "master"
+    auto_update = True
+    
+    #
+    # this could be left unchanged for virtually all stable and developer
+    # releases.
+    #
     name = "pnicore"
-    version = "1.1.0"
     license = "GPL V2"
     url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
@@ -28,6 +40,7 @@ class PnicoreConan(ConanFile):
         #if the commit has changed the hash of the build configuration will change
         #and thus force a rebuild of the package
         
+        import git
         current_commit = None
         self.output.info("Checking the GIT commit")       
         source_path =  os.path.join(self.conanfile_directory,"..","source","libpnicore")
@@ -42,6 +55,12 @@ class PnicoreConan(ConanFile):
             self.output.info("Could not retrieve current commit of sources")
             
         return current_commit
+    
+    def _set_commit_option(self):
+        current_commit = self._get_current_commit()
+        if current_commit != None:
+            #if we can obtain the actual commit of the repository we can do something with it
+            self.options.commit = current_commit
         
         
 
@@ -52,13 +71,7 @@ class PnicoreConan(ConanFile):
 
             self.options["Boost"].shared = self.options.shared
             
-            
-        current_commit = self._get_current_commit()
-        
-        if current_commit != None:
-            #if we can obtain the actual commit of the repository we can do something with it
-            self.options.commit = current_commit
-            
+        if self.auto_update: self._set_commit_option()
         
 
     def source(self):
@@ -73,6 +86,8 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 '''
         )
+        
+        if self.auto_update: self._set_commit_option()
 
 
     def build(self):
