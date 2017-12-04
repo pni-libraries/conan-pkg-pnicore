@@ -60,7 +60,7 @@ class PnicoreConan(ConanFile):
             commit = gcmd.ls_remote(self.pnicore_git_url,"refs/heads/master").split("\t")[0]
             self.output.info("The current remote master is on: %s" %commit)
         except:
-            self.output("Failure to determine the current commit from remote")
+            self.output.info("Failure to determine the current commit from remote")
             
         return commit
     
