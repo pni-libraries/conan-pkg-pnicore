@@ -128,13 +128,7 @@ conan_basic_setup()
         cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
 
         cmake.configure(source_dir="libpnicore")
-
         cmake.build()
-
-        if self.settings.os=="Windows":
-            cmake.build(target="RUN_TESTS")
-        else:
-            cmake.build(target="test")
 
 
         cmake.build(target="install")
