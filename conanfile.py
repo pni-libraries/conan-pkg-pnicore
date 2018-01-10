@@ -35,9 +35,10 @@ class PnicoreConan(ConanFile):
     """
 
     boost_package = "Boost/1.62.0@lasote/stable"
+    zlib_package = "zlib/1.2.8@conan/stable"
     pnicore_git_url = "https://github.com/pni-libraries/libpnicore.git"
     
-    def _get_local_current_commit(self,repository_path):
+    def _current_local_commit(self,repository_path):
         self.output.info("Trying to access repository in: "+repository_path)
         commit = None
         try:
@@ -51,7 +52,7 @@ class PnicoreConan(ConanFile):
             
         return commit
     
-    def _get_remote_current_commit(self):
+    def _current_remote_commit(self):
         self.output.info("Trying to get latest commit from remote repository")
         gcmd = git.cmd.Git()
         commit = None
@@ -63,39 +64,18 @@ class PnicoreConan(ConanFile):
             self.output.info("Failure to determine the current commit from remote")
             
         return commit
-    
-    def _get_current_commit(self):
-        #we pull here the repository and add the commit to the build options. 
-        #if the commit has changed the hash of the build configuration will change
-        #and thus force a rebuild of the package
-        
-        
-        current_commit = None
-        self.output.info("Checking the GIT commit")       
-        source_path =  os.path.join(self.conanfile_directory,"..","source","libpnicore")
-        
-        if os.path.exists(source_path):
-            current_commit = self._get_local_current_commit(source_path)
-        else:
-            current_commit = self._get_remote_current_commit()
-            
-        return current_commit
-    
-    def _set_commit_option(self):
-        current_commit = self._get_current_commit()
-        if current_commit != None:
-            #if we can obtain the actual commit of the repository we can do something with it
-            self.options.commit = current_commit
         
     def configure(self):
         self.output.info("Setting the configuration")
         #setting up boost if required
         if not self.options.with_system_boost:
             self.requires(self.boost_package)
+            self.requires(self.zlib_package)
 
             self.options["Boost"].shared = self.options.shared
             
-        if self.auto_update: self._set_commit_option()
+        if self.auto_update: 
+            self.options.commit = self._current_remote_commit()
         
 
     def source(self):
@@ -112,7 +92,8 @@ conan_basic_setup()
 '''
         )
         
-        if self.auto_update: self._set_commit_option()
+        if self.auto_update: 
+            self.options.commit = self._current_local_commit(self.source_folder)
 
 
     def build(self):
