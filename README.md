@@ -1,7 +1,6 @@
 # conan-pkg-pnicore
-A conan package for the pnicore library
 
-This is a conan package for the ``pnicore`` library. 
+A conan package for ``pnicore``.  
 
 ## Getting the right package  
 
@@ -13,7 +12,7 @@ branch you are taking it.
 * if you use one of the version branches you get a conan package for a particular 
   released version of ``pnicore``.  
 
-### Using master 
+### The *master*-branch package 
 
 If you simply clone the repository and use the package in the master branch you will get 
 something like a *rolling* release of ``pnicore``. The package is configured so that it 
@@ -29,7 +28,31 @@ code up to date with new features implemented in ``libpnicore``. However, I do n
 to use this package for production builds. For the latter situations use one of the 
 version branches. 
 
-### Using version branches
+### The *version*-branches
+
+
+## Using the package 
+
+Clone the repository
+
+``` bash
+$ git clone https://github.com/pni-libraries/conan-pkg-pnicore.git
+$ cd conan-pkg-pnicore
+
+```
+
+and pick the right branch (if you are happy with the master just omit the next step). 
+Let's say we want to use the package for version 1.0.0
+
+``` bash
+$ git branch v1.0.0
+```
+
+once you are on the right branch export the package to your local ``conan`` cache
+
+``` bash
+$ conan export . <yourname>/<yourchannel>
+```
 
 
 
