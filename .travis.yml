@@ -14,6 +14,8 @@ before_script:
     
 script:
     - docker exec -it build bash -c "conan create -bmissing . eugenwintersberger/devel"
+    - docker exec -it build bash -c "conan export . eugenwintersberger/devel"
+    - docker exec -it build bash -c "cd .. & conan upload -rdesypackages pnicore/master@eugenwintersberger/devel"
     
 after_script:
     - docker container stop build
