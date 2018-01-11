@@ -38,20 +38,6 @@ class PnicoreConan(ConanFile):
     zlib_package = "zlib/1.2.8@conan/stable"
     pnicore_git_url = "https://github.com/pni-libraries/libpnicore.git"
     
-    def _current_local_commit(self,repository_path):
-        self.output.info("Trying to access repository in: "+repository_path)
-        commit = None
-        try:
-            self.run("cd %s && git pull" %repository_path) 
-            repo = git.Repo(repository_path)
-            commit = repo.commit().hexsha
-            self.output.info("Current commit is: "+commit)
-            
-        except:
-            self.output.info("Could not retrieve current commit of sources")
-            
-        return commit
-    
     def _current_remote_commit(self):
         self.output.info("Trying to get latest commit from remote repository")
         gcmd = git.cmd.Git()
@@ -84,6 +70,21 @@ class PnicoreConan(ConanFile):
         self.run("cd libpnicore && git submodule init && git submodule update --remote")
         # This small hack might be useful to guarantee proper /MT /MD linkage in MSVC
         # if the packaged project doesn't have variables to set it properly
+
+
+
+    def build(self):
+        #
+        # pulling from the original repository 
+        #
+        self.output.info("Running the build")
+        self.output.info("pull from the master branch ...")
+        self.run("cd libpnicore && git pull")
+        
+        #
+        # patching the sources before the build
+        #
+        self.output.info("patching CMakeLists.txt ...")
         tools.replace_in_file("libpnicore/CMakeLists.txt", "include(CTest)",
 '''
 include(CTest)
@@ -92,17 +93,13 @@ conan_basic_setup()
 '''
         )
         
-        if self.auto_update: 
-            self.options.commit = self._current_local_commit(self.source_folder)
-
-
-    def build(self):
-        self.output.info("Running the build")
+        #
+        # Running cmake and perform the build
+        #
         cmake = CMake(self)
 
         if self.options.shared:
             cmake.definitions["BUILD_SHARED_LIBS"]="ON"
-
 
 
         cmake.definitions["CMAKE_INSTALL_PREFIX"] = self.package_folder
@@ -110,7 +107,6 @@ conan_basic_setup()
 
         cmake.configure(source_dir="libpnicore")
         cmake.build()
-
 
         cmake.build(target="install")
 
@@ -125,3 +121,5 @@ conan_basic_setup()
         #on windows we copy the files to the bin directory
         if self.settings.os=="Windows":
             self.copy("*.dll","bin","bin")
+        elif self.settings.os=="Linux":
+            self.copy("*.so","lib","lib")
