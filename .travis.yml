@@ -13,7 +13,7 @@ before_script:
     - docker exec -it build bash -c "conan user"
     
 script:
-    - docker exec -it build bash -c "conan create -b missing . eugenwintersberger/devel"
+    - docker exec -it build bash -c "conan create -bmissing . eugenwintersberger/devel"
     
 after_script:
     - docker container stop build
