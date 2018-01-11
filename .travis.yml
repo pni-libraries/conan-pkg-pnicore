@@ -7,7 +7,7 @@ services:
     - docker
     
 before_script:
-    - docker run --name build -i -d -v"$PWD:/src" eugenwintersberger/debian_9:latest
+    - docker run --name build -e CONAN_LOGIN_USERNAME CONAN_PASSWORD -i -d -v"$PWD:/src" eugenwintersberger/debian_9:latest
     - docker exec -it build ls
     - docker exec -it build bash -c "pip install conan --upgrade"
     - docker exec -it build bash -c "conan user"
