@@ -20,7 +20,7 @@ class PnicoreConan(ConanFile):
     #
     name = "pnicore"
     license = "GPL V2"
-    url = "<Package recipe repository url here, for issues about the package>"
+    url = "https://github.com/pni-libraries/conan-pkg-pnicore"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False],
                "with_system_boost":[True,False],
