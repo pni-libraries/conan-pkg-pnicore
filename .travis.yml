@@ -1,0 +1,20 @@
+language: cpp
+sudo: required
+dist: trusty
+
+
+services:
+    - docker
+    
+before_script:
+    - docker run --name build -i -d -v"$PWD:/src" eugenwintersberger/debian_9:latest
+    - docker exec -it build ls
+    - docker exec -it build bash -c "pip install conan"
+    - docker exec -it build bash -c "conan user"
+    
+script:
+    - docker exec -it build bash -c "conan create . eugenwintersberger/devel"
+    
+after_script:
+    - docker container stop build
+    
