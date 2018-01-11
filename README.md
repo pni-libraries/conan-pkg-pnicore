@@ -3,7 +3,7 @@ A conan package for the pnicore library
 
 This is a conan package for the ``pnicore`` library. 
 
-# Usage 
+## Usage 
 
 There are several ways how to use this package depending on from which 
 branch you are taking it. 
@@ -13,6 +13,8 @@ branch you are taking it.
 * if you use one of the version branches you get a conan package for a particular 
   released version of ``pnicore``.  
 
-## Using master 
+### Using master 
 
 This package 
+
+### Using version branches
