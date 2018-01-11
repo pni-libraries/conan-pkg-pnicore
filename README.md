@@ -25,11 +25,16 @@ key and thus trigger a rebuild of the package.
 
 This version of the package is mainly intersting for developers who want to keep their 
 code up to date with new features implemented in ``libpnicore``. However, I do not recommend 
-to use this package for production builds. For the latter situations use one of the 
+to use this package for production builds, instead use one of the 
 version branches. 
 
 ### The *version*-branches
 
+For every version of ``pnicore`` there will be a version branch available with a corresponding 
+conan package. The branches have names of the form ``v<MAJOR>.<MINOR>.<PATCH>``. 
+Checkout the appropriate branch in order to get the right package. 
+
+> *There are currently no version branches*
 
 ## Using the package 
 
@@ -53,6 +58,10 @@ once you are on the right branch export the package to your local ``conan`` cach
 ``` bash
 $ conan export . <yourname>/<yourchannel>
 ```
+
+You should find the package now in your local cache. 
+
+
 
 
 
