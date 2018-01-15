@@ -36,6 +36,7 @@ class PnicoreConan(ConanFile):
 
     boost_package = "Boost/1.62.0@lasote/stable"
     zlib_package = "zlib/1.2.8@conan/stable"
+    bzip2_package = "bzip2/1.0.6@conan/stable"
     pnicore_git_url = "https://github.com/pni-libraries/libpnicore.git"
     
     def _current_remote_commit(self):
@@ -54,11 +55,14 @@ class PnicoreConan(ConanFile):
     def configure(self):
         self.output.info("Setting the configuration")
         #setting up boost if required
-        if not self.options.with_system_boost:
-            self.requires(self.boost_package)
-            self.requires(self.zlib_package)
-
-            self.options["Boost"].shared = self.options.shared
+        self.requires(self.boost_package)
+        self.requires(self.zlib_package)
+        self.requires(self.bzip2_package)
+        
+        self.options["Boost"].shared=True
+        self.options["Boost"].python=False
+        self.options["zlib"].shared=True
+        self.options["bzip2"].shared=True
             
         if self.auto_update: 
             self.options.commit = self._current_remote_commit()
