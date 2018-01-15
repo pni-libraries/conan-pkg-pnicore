@@ -62,7 +62,6 @@ class PnicoreConan(ConanFile):
         self.options["Boost"].shared=True
         self.options["Boost"].python=False
         self.options["zlib"].shared=True
-        self.options["bzip2"].shared=True
             
         if self.auto_update: 
             self.options.commit = self._current_remote_commit()
