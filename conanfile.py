@@ -60,7 +60,6 @@ class PnicoreConan(ConanFile):
         self.requires(self.bzip2_package)
         
         self.options["Boost"].shared=True
-        self.options["Boost"].python=False
         self.options["zlib"].shared=True
             
         if self.auto_update: 
